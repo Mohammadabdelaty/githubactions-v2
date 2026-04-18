@@ -16,3 +16,15 @@ jobs:
           with:
             name: my-hello-artifact
             path: hello.txt # Root path of the repo
+
+    job-2:
+      runs-on: ubuntu-latest
+      steps:
+      - name: download the artifact
+        uses: actions/download-artifact@v3
+        with:
+            name: my-hello-artifact
+
+      - name: read the filw
+        run: |
+            cat hello.txt
