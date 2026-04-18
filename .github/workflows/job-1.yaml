@@ -1,0 +1,18 @@
+name: workflow-dragon
+
+on: push
+jobs:
+    job-1:
+        runs-on: ubuntu-latest
+        steps:
+        - name: checkput
+          uses: actions/checkput@v3
+
+        - name: create a file
+          run: |
+            echo "hello world" > hello.txt
+        
+        - uses: actions/upload-artifact@v7
+          with:
+            name: my-hello-artifact
+            path: hello.txt # Root path of the repo
