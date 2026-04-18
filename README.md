@@ -4,7 +4,10 @@
 
 - Workflow > job > steps
 
-## Introduction
+
+
+# Syntax
+
 - There are some pre-built actions, some of them are verified and some others from community.
 
     ![alt text](image.png)
@@ -96,5 +99,29 @@
 
         ![alt text](image-20.png)
 
-- runner-context
+- runner-context: it show default variables in the repo which can be used (same as gitlab) in as expression for conditions
 
+    ![alt text](image-21.png)
+
+- expression: we use the conext in condition as follows
+
+    ![alt text](image-22.png)
+
+    - This will skip this job if not in main branch using the expression
+
+        ![alt text](image-23.png)
+
+- event filter: used in cases like trigger the workflow in a specific condition
+
+    ![alt text](image-24.png)
+
+    - It also can be done for pull-requests
+
+        ![alt text](image-25.png)
+
+    - some use cases require to run specific workflow as a check for a feature so it can be done only with pull request, whatever this request is open or closed 
+
+    - Skip the workflow
+        - [skip ci], [ci skip], [action skip], [skip action]
+
+    
