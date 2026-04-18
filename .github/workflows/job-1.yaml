@@ -5,8 +5,8 @@ jobs:
     job-1:
         runs-on: ubuntu-latest
         steps:
-        - name: checkput
-          uses: actions/checkput@v3
+        - name: checkout
+          uses: actions/checkout@v3
 
         - name: create a file
           run: |
