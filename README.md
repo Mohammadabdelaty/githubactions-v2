@@ -124,4 +124,57 @@
     - Skip the workflow
         - [skip ci], [ci skip], [action skip], [skip action]
 
-    
+## Nodejs Pipeline
+
+    ![alt text](image-26.png)
+
+## Exeprission for code coverage error
+
+    ![alt text](image-27.png)
+
+- We may need to use condition in code coverage use case to keep going with the workflow even i didn't meet the threshold
+
+    ![alt text](image-28.png)
+
+    ![alt text](image-29.png)
+
+- Also we can use `if` condition, usecase is that if there is a failure in one step and the next step uploads artifacts so to shw why eror happens, we need to use context as well for a step
+
+    ![alt text](image-30.png)
+
+    ![alt text](image-31.png)
+
+    - Or, we can use a pre-confiugred expression ready 
+
+        ![alt text](image-32.png)
+
+    - The above `failure()` describes the status of the previous step
+
+    - But the best practice in this case is to use `always()`, we need it to run it whether the previous one worked or not
+
+        ![alt text](image-33.png)
+
+
+#### Demo to be done
+
+```
+Navigate to your GitHub account and use github-actions-solar-system repository within feature/workflow branch
+Explore and modify the workflow file named solar-system.yml
+
+Do the following
+Append a new job with id as code-coverage,
+a. This job should execute on this operating system - ubuntu-latest
+b. Add following steps
+Step 1 - use an action to checkout the repository
+Step 2 - use actions/setup-node action to setup NodeJS of version 18
+Step 3 - Install NodeJS dependencies
+Step 4 - Run Code-coverage command (npm run code-coverage)
+This step may fail, configure the step to prevent the job from failing when this step fails.
+Step 5 - Upload code-coverage reports using upload-artifact action with the below
+config
+- name: Code-Coverage-Result
+- path: coverage
+- retention-days: 5
+
+Both the unit-testing and code-coverage jobs should run in parallel.
+```
