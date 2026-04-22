@@ -178,3 +178,137 @@ config
 
 Both the unit-testing and code-coverage jobs should run in parallel.
 ```
+
+## Caching dependencies 
+
+- Caching vs artifacts
+    - Caching: re-use files that don't change between jobs.
+    - Artifacts: Stors files that will be used between jobs.
+
+- So we specify the path that files will be stored in, then a `key` for it.
+    - This `key uses hash` for a file that is needed to be cached as if it's re-written, if this hash changes, so we get the new file or update.
+
+    ![alt text](image-34.png)
+
+    - this is in 1st start
+
+    ![alt text](image-35.png)
+
+    - this is when we run the workflow for the next time
+
+    ![alt text](image-36.png)
+
+    ![alt text](image-37.png)
+
+- This example above shows another difference between caching and artifacts,
+    - artifacts are not available for the next running workflow, but the
+
+- You need to add the cache step in the 2 jobs in the same workflow with the same key before installation step.
+
+## Doecker, push and test
+
+### Dockerhub
+
+- Only build and test for now
+
+    ![alt text](image-38.png)
+
+- To push, add the build push again but with `true` value for the `push` arg.
+
+    ![alt text](image-39.png)
+
+### GHCR
+
+- Login
+
+    ![alt text](image-40.png)
+
+- Push:
+    - 1st one is for doackerhub
+    - snd is for ghcr
+
+    ![alt text](image-41.png)
+
+> No need to add `GITHUB_TOKEN` as a secret.
+
+- The github tocken needs to have the read/write permission
+
+    ![alt text](image-42.png)
+
+- So we add the permission: wrtie to the packages
+
+    ![alt text](image-43.png)
+
+    ![alt text](image-44.png)
+
+## Job and service containers
+
+- There was an issue with accessing the mongodb database, slow, so they've decideed to run similar db as a `service container` and the nodejs in `job container` to handl testing and installing dependancies while testing the app to be faster
+
+    ![alt text](image-45.png)
+
+    ![alt text](image-46.png)
+
+    ![alt text](image-47.png)
+
+- We'll run code coverage in a job container as well but at this time it needs to access the mongodb serverce no using the `localhost` as the last job, in needs a name -all containers by default are in a brige network- we name it mongo
+
+    ![alt text](image-48.png)
+
+    - and change the mongodb url env variable
+
+## Demo
+
+Navigate to your GitHub account and use github-actions-solar-system repository within feature/workflow branch
+Explore and modify the workflow file named solar-system.yml
+
+Do the following:
+Modify the job with id as unit-testing,
+a. This job should make use of a container to run all the steps
+Container image - node:20
+The Setup Node.js Version step should be commented out because Node.js is already available in the container
+b. Commit the changes and checkout the workflow execution
+
+## Kubernetes deployment
+
+- We need kubectl installation step by azure
+- keep kube config file as a repo secret
+- use `kuberenetes set context` by azure.
+
+    ![alt text](image-49.png)
+
+- keep variable inside manifest yaml files as follows `_{_NAMESPACE_}_`
+
+    ![alt text](image-50.png)
+
+- Add repo variable with name `NAMESPACE`
+- Then replace it with `cschleiden/replace-token@v1`
+
+    ![alt text](image-51.png)
+
+- Another step for setting the `INGRESS_IP` variable >> `env.GITHUB` and make it available for next steps.
+
+    ![alt text](image-52.png)
+
+    ![alt text](image-53.png)
+
+    ![alt text](image-54.png)
+
+- Then create a secret with mongodb data and deploy
+
+    ![alt text](image-55.png)
+
+- To test it do anoher job but we need to first get the ingress host like ingress ip and but, 
+    - As testing will be in another job we will need to expose the ingress host from the previous step as job output.
+    - It requires to set id to the 1st job 
+
+        ![alt text](image-56.png)
+
+        ![alt text](image-57.png)
+
+# Environments
+
+- Used to set multi env dev and prod
+- Set vars and could be the same var name but one foe dev with dev values like kubeconfig of dev cluster and the othe one for prod like the kubeconfig of the production env.
+
+    ![alt text](image-58.png)
