@@ -312,3 +312,174 @@ b. Commit the changes and checkout the workflow execution
 - Set vars and could be the same var name but one foe dev with dev values like kubeconfig of dev cluster and the othe one for prod like the kubeconfig of the production env.
 
     ![alt text](image-58.png)
+
+- You can also set rules like:
+    - leader approval
+    - wait time for making sure all good 
+
+- We can set env vars and secrets like (kubeconfig)
+
+- it takes name and url
+
+    ![alt text](image-61.png)
+    
+    ![alt text](image-59.png)
+
+## Custom actions
+
+![alt text](image-62.png)
+
+- It's like creating your own module in python
+- here you creating your own action in a path likw this under `.github`
+
+    ![alt text](image-63.png)
+
+- Also we can package some steps or repeated ones in one action
+
+- It's like variables and fiilling the required fields with these variable 
+
+    ![alt text](image-64.png)
+
+- So you can use this action by copying the `relative path` as the action, 
+
+    ![alt text](image-65.png)
+
+    To this
+
+    ![alt text](image-66.png)
+
+- Specify the shell dep on runner like `shell: bash`
+
+## Docker action
+
+- A docker image for running a REST API reqeust to call `GIPHY` 3rd party.
+
+- Here we will use the following custom action to use `docker` instead of `composit` as the last action.
+
+    ![alt text](image-68.png)
+
+- The args in the end referes to inputs which will be input to the shell script to run inside this container
+
+    ![alt text](image-69.png)
+
+- We can call this custom action from another repo
+
+    `uses: <repo-owner>/<repo>@<branch>`
+
+## Custom action
+
+- You can create a custom action and release it to marketplace
+
+    ![alt text](image-71.png)
+
+- This action will be used then run the index.js file to do giphy rest api request
+
+    ![alt text](image-72.png)
+
+# Runners
+
+- As every ci tools you can have github/self hosted runners
+
+- It can be on enterprise, or, or repo levels
+
+- All running jobs work will be in `_work` dir in home of self-hosted runner
+
+## Re-usable workflows
+
+- As a funtion in programming, we call another workflow
+- This another wf is created and triggered with `on.workflow_call`
+- call it as we've called custom action
+
+    ![alt text](image-73.png)
+
+- `Secrets` Some variables and secret may be not be inhireted in the on_call wf, so we will need to inhirt them
+
+    - on the main wf add them
+
+        ![alt text](image-74.png)
+    
+    - on the on_call add them ass follows
+
+        ![alt text](image-75.png)
+
+- `Inputs` In the same way of inputting the secrets, we need to input another variables not secrets this time
+- These vars are Kube version, environmet (prod, dev) as it referes to dir which contains the yaml files used in deployment
+
+    ![alt text](image-76.png)
+
+- Then use it in the same reusable wf
+
+    ![alt text](image-77.png)
+
+    ![alt text](image-78.png)
+
+- In the main wf
+
+    ![alt text](image-80.png)
+
+    ![alt text](image-81.png)
+
+- You'll see mongodb used in run
+
+    ![alt text](image-82.png)
+
+- `Output`. We set output to resuable wf
+
+    ![alt text](image-83.png)
+
+    - USe it in mian wf
+
+        ![alt text](image-84.png)
+
+## Reports
+
+- We can donwload artifact like code converage and test, put them in one dir, upload that dir to S3
+- We use `s3 Sync`
+
+    ![alt text](image-86.png)
+
+    ![alt text](image-87.png)
+
+## Slack notify
+
+- Create a channel on slack
+- Create an app from docs, which will get you a webhook
+
+    ![alt text](image-88.png)
+
+    ![alt text](image-89.png)
+
+- We made it runs `always()` not to depend on another rules
+
+## Security
+
+- You should check the action code first if it's not verified
+
+    ![alt text](image-90.png)
+
+- Sometimes script injection can be very risky
+    - when i trigger the wf with an issue creation
+
+       ![alt text](image-92.png)
+    
+    - then do this to the title of issue
+
+        ![alt text](image-94.png)
+
+- Or using `httpdump` curl to get aws secret key
+
+    ![alt text](image-97.png)
+
+    ![alt text](image-95.png)
+    
+    ![alt text](image-96.png)
+
+- So how to avoid this??
+
+    - We keep the title in env in memory
+
+    ![alt text](image-98.png)
+
+- You can keep secret in vault and integrat it with github
+
+[![Solar System Workflow](https://github.com/Mohammadabdelaty/github-actions-solar-system/actions/workflows/solar-system-2.yml/badge.svg)](https://github.com/Mohammadabdelaty/github-actions-solar-system/actions/workflows/solar-system-2.yml) 🥲🥲🥲🥲🥲🥲
